@@ -20,7 +20,7 @@ public class ExpensesTracker {
                 money = scan.nextDouble();
                 scan.nextLine();
                 b = name +" "+ "purchased" +" "+ object +" "+ "for"+" "+ money +" "+ "US dollars.";
-                fw.write(b);
+                fw.write(b + System.lineSeparator());
                 System.out.println("Would you like to log another purchase? (y/n)");
                 answer = scan.nextLine();
 
@@ -33,24 +33,17 @@ public class ExpensesTracker {
             System.out.println("Would you like to read a summary of your purchases?(y/n)");
             summary = scan.nextLine();
 
-            FileReader reader = new FileReader("expenses.txt");
-            Scanner readit = new Scanner(new File("expenses.txt"));
-
             if (summary.equals("y")) {
-                int data = reader.read();
-                
-                while (readit.hasNext()) {
-                    System.out.println(readit.nextLine());
+                try (Scanner readit = new Scanner(new File("expenses.txt"))) {
+                    while (readit.hasNextLine()) {
+                        System.out.println(readit.nextLine());
+                    }
                 }
-
             }
             System.out.println("Get off of ZoodMall!");
 
             // Close ClassWriter & Scanner objects
-            fw.close();
-
             scan.close();
-            reader.close();
 
             // If you have already have a expenses.txt file, you need to delete it
             // before you compile your code again
