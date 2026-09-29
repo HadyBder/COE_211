@@ -16,24 +16,26 @@ public class Calculator {
         operator = scan.nextLine();
         System.out.println("Input the second number:");
         num2 = scan.nextInt();
+
+        String result;
         switch(operator){
-        case "+": 
-            add(num1, num2);
-            System.out.println(add(num1, num2));
+        case "+":
+            result = add(num1, num2);
             break;
         case "-":
-            subtract(num1,num2);
-            System.out.println(subtract(num1, num2));
+            result = subtract(num1, num2);
             break;
         case "*":
-            multiply(num1, num2);
-            System.out.println(multiply(num1, num2));
+            result = multiply(num1, num2);
             break;
         case "/":
-            divide(num1, num2);
-            System.out.println(divide(num1, num2));
+            result = divide(num1, num2);
+            break;
+        default:
+            result = "Unsupported operator. Use +, -, *, or /.";
             break;
         }
+        System.out.println(result);
     }
 
     public String add(int a, int b) {
@@ -49,6 +51,9 @@ public class Calculator {
     }
 
     public String divide(int a, int b) {
+        if (b == 0) {
+            return "Cannot divide by zero.";
+        }
         return  (a + "/" + b +"=" + (a/b));
 
     }
