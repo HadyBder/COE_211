@@ -1,38 +1,41 @@
 import java.util.*;
 import java.io.*;
+
 public class ExpensesTracker {
     public static void main(String[] args) throws IOException {
-        String name, object, answer, summary, display, a ,b;
+        String name, object, answer, summary, b;
         double money;
-        try {
-            // Create FileWriter & Scanner objects & y/n string
-            Scanner scan = new Scanner(System.in);
-            FileWriter fw = new FileWriter(new File("expenses.txt"));
-
-            // Start gathering information inside the loop you will start
+        try (Scanner scan = new Scanner(System.in);
+             FileWriter fw = new FileWriter(new File("expenses.txt"))) {
             do {
-
                 System.out.println("Input your name: ");
                 name = scan.nextLine();
                 System.out.println("What did you purchase?");
                 object = scan.nextLine();
-                System.out.println("How much did you pay? (in USD)");
-                money = scan.nextDouble();
-                scan.nextLine();
-                b = name +" "+ "purchased" +" "+ object +" "+ "for"+" "+ money +" "+ "US dollars.";
+                while (true) {
+                    System.out.println("How much did you pay? (in USD)");
+                    String input = scan.nextLine();
+                    try {
+                        money = Double.parseDouble(input);
+                        if (Double.isFinite(money) && money >= 0) {
+                            break;
+                        }
+                    } catch (NumberFormatException ignored) {
+                        // Ask again without losing the rest of the input.
+                    }
+                    System.out.println("Please enter a valid, nonnegative amount.");
+                }
+                b = name + " purchased " + object + " for " + money + " US dollars.";
                 fw.write(b + System.lineSeparator());
                 System.out.println("Would you like to log another purchase? (y/n)");
                 answer = scan.nextLine();
-
-
             } while (answer.equals("y"));
 
             System.out.println("Get off of ZoodMall!");
-            fw.close();
+            fw.flush();
 
             System.out.println("Would you like to read a summary of your purchases?(y/n)");
             summary = scan.nextLine();
-
             if (summary.equals("y")) {
                 try (Scanner readit = new Scanner(new File("expenses.txt"))) {
                     while (readit.hasNextLine()) {
@@ -41,12 +44,6 @@ public class ExpensesTracker {
                 }
             }
             System.out.println("Get off of ZoodMall!");
-
-            // Close ClassWriter & Scanner objects
-            scan.close();
-
-            // If you have already have a expenses.txt file, you need to delete it
-            // before you compile your code again
         } catch (IOException c) {
             System.out.println("An error occurred.");
             c.printStackTrace();
